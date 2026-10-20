@@ -1,0 +1,46 @@
+{% extends "classifier/base.html" %}
+{% block title %}Result · Skin Cancer Classification{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>Result</h1>
+
+  {% if prediction %}
+    <div class="verdict {% if prediction.label == 'Malignant' %}mal{% else %}ben{% endif %}">
+      <div class="verdict-label">Model estimate: <strong>{{ prediction.label }}</strong></div>
+      <div class="bar" role="img"
+           aria-label="Probability malignant {{ prediction.pct_malignant }} percent">
+        <div class="bar-fill" style="width: {{ prediction.pct_malignant }}%"></div>
+      </div>
+      <div class="bar-legend">
+        <span>Benign {{ prediction.pct_benign }}%</span>
+        <span>Malignant {{ prediction.pct_malignant }}%</span>
+      </div>
+    </div>
+    {% comment %} {% if prediction.metrics %}
+    <p class="muted small">
+      Held-out test performance of this model: ROC-AUC {{ prediction.metrics.test_auc|floatformat:2 }},
+      malignant recall {{ prediction.metrics.malignant_recall|floatformat:2 }}
+      (n={{ prediction.metrics.n_test }}).
+    </p> 
+    {% endif %} {% endcomment %}
+  {% endif %}
+
+  {% if error %}<div class="notice warn">{{ error }}</div>{% endif %}
+
+  
+</section>
+
+<section class="card">
+  <h2>Processing steps</h2>
+  <div class="grid">
+    {% for title, url in images %}
+    <figure>
+      <img src="{{ url }}" alt="{{ title }}" loading="lazy">
+      <figcaption>{{ title }}</figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+
+<p><a class="btn secondary" href="{% url 'classifier:index' %}">Analyse another image</a></p>
+{% endblock %}

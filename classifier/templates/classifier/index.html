@@ -1,0 +1,45 @@
+{% extends "classifier/base.html" %}
+{% block content %}
+<section class="card hero">
+  <h1>Upload a dermoscopic image</h1>
+
+
+  <form method="post" enctype="multipart/form-data" id="upload-form">
+    {% csrf_token %}
+    <label class="drop" for="id_image" id="drop">
+      <span class="drop-title" id="drop-title">Choose an image or drag it here</span>
+      <span class="muted small">JPG or PNG, up to 10 MB</span>
+      {{ form.image }}
+    </label>
+    {% if form.image.errors %}
+      <ul class="errors">{% for e in form.image.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+    {% endif %}
+    <img id="preview" class="preview" alt="" hidden>
+    <button type="submit" class="btn" id="submit-btn">Analyse image</button>
+  </form>
+</section>
+
+<script>
+  const input = document.getElementById('id_image');
+  const title = document.getElementById('drop-title');
+  const preview = document.getElementById('preview');
+  const drop = document.getElementById('drop');
+  input.addEventListener('change', () => {
+    const f = input.files[0];
+    if (!f) return;
+    title.textContent = f.name;
+    preview.src = URL.createObjectURL(f);
+    preview.hidden = false;
+  });
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => {
+    e.preventDefault(); drop.classList.add('over');
+  }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => {
+    drop.classList.remove('over');
+  }));
+  document.getElementById('upload-form').addEventListener('submit', () => {
+    const b = document.getElementById('submit-btn');
+    b.disabled = true; b.textContent = 'Analysing… (a few seconds)';
+  });
+</script>
+{% endblock %}

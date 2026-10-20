@@ -1,0 +1,12 @@
+{
+  "test_auc": 0.8392000000000001,
+  "test_accuracy": 0.75,
+  "malignant_recall": 0.73,
+  "malignant_precision": 0.7604166666666666,
+  "n_train": 800,
+  "n_test": 200,
+  "best_params": {
+    "svm__C": "10",
+    "svm__gamma": "0.01"
+  }
+}
