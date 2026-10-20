@@ -36,7 +36,7 @@ def label_of(record: dict):
 def search(diagnosis_1: str, limit: int, extra_query: str = "", session=None):
     """Yield up to `limit` image records whose diagnosis_1 matches."""
     session = session or _session()
-    query = f'diagnosis_1:"{diagnosis_1}"'
+    query = f'diagnosis_1:"{diagnosis_1}"' 
     if extra_query:
         query += f" AND {extra_query}"
     url = f"{BASE}/images/search/"
